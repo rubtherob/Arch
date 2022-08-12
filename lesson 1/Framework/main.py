@@ -23,6 +23,18 @@ class Framework:
         else:
             view = PageNotFound404()
         request = {}
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'POST':
+            data = PostRequests().get_request_params(environ)
+            request['data'] = data
+            print(f'Нам пришёл post-запрос: {Framework.decode_value(data)}')
+        if method == 'GET':
+            request_params = GetRequests().get_request_params(environ)
+            request['request_params'] = request_params
+            print(f'Нам пришли GET-параметры: {request_params}')
+        print(request)
 
         for front in self.fronts_lst:
             front(request)
